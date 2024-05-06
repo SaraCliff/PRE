@@ -180,13 +180,8 @@ class Personaje(pygame.sprite.Sprite):
 		super().__init__()
 		self.player1 = player1
 		self.player2 = player2
+		self.selected_image = None
 
-	def select_player(self, buttons):
-		selected_images = [button.image for button in buttons if button.checkForInput(pygame.mouse.get_pos())]
-		if len(selected_images) >= 2:
-			self.player1 = selected_images[0]
-			self.player2 = selected_images[1]
-		return self.player1, self.player2
 
 	def select_character(self, buttons):
 		selected_image = None
@@ -196,6 +191,9 @@ class Personaje(pygame.sprite.Sprite):
 					for button in buttons:
 						if button.checkForInput(pygame.mouse.get_pos()):
 							selected_image = button.image
+
+		self.selected_image = selected_image
+
 		return selected_image
 
 

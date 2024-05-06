@@ -107,8 +107,6 @@ def two_player_screen(screen, personaje):
 if __name__ == "__main__":
     pygame.init()
     SCREEN = pygame.display.set_mode((1280, 720))
-    player1_image = pygame.image.load("assets/Options Rect.png")
-    player2_image = pygame.image.load("assets/Options Rect.png")
     personaje = Personaje()  # Crear una instancia de la clase Personaje sin valores iniciales
     two_player_screen(SCREEN, personaje)
 
