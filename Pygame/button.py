@@ -67,6 +67,7 @@ class InputText:
 		return rect.collidepoint(x, y)
 
 class Database:
+
 	def __init__(self, filename):
 		self.conn = sqlite3.connect(filename)
 		self.c = self.conn.cursor()
@@ -89,17 +90,27 @@ class Database:
 			if user[1] == password:
 				self.c.execute("UPDATE users SET SignIn=? WHERE username=?", (1, username))
 				self.conn.commit()  # Guardar los cambios en la base de datos
+				with open("logged_in_username.txt", "w") as archivo:
+					archivo.write(username)
 				return True
 			else:
 				return "Password is incorrect"
 		else:
 			return "User doesn't exist"
 
-	def logout(self, username):
-		self.c.execute("UPDATE users SET SignIn=? WHERE username=?", (0, username))
-		self.conn.commit()
-		return "User logged out successfully"
-
+	def logout(self):
+		try:
+			with open("logged_in_username.txt", "r") as archivo:
+				username = archivo.read().strip()
+			if username:  # Si hay un usuario conectado
+				self.c.execute("UPDATE users SET SignIn=? WHERE username=?", (0, username))
+				self.conn.commit()
+				with open("logged_in_username.txt", "w") as archivo:
+					archivo.write("")  # Borra el nombre de usuario del archivo
+			return True
+		except Exception as e:
+			print("Error during logout:", e)
+			return False
 
 	def username_exists(self, username):
 		self.c.execute("SELECT * FROM users WHERE username=?", (username,))

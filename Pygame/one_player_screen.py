@@ -1,6 +1,6 @@
 import pygame
 import sys
-from button import Button, TextDrawer, Personaje
+from button import Button, TextDrawer, Personaje, Database
 
 def one_player_screen(screen):
     from how_to_play_screen import how_to_play_screen
@@ -45,7 +45,7 @@ def one_player_screen(screen):
                          text_input="BACK", font=get_font(15), base_color="#d7fcd4", hovering_color="White")
 
     personaje = Personaje()
-
+    database = Database('userdata.db')
     while True:
         SCREEN = screen
         SCREEN.blit(BG, (0, 0))
@@ -53,6 +53,7 @@ def one_player_screen(screen):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                database.logout()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:

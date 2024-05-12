@@ -59,7 +59,6 @@ def log_in_screen(screen):
                 if log_in_button.checkForInput(event.pos):
                     result = database.login(username_input.text, password_input.text)
                     if result == True:
-                        logged_in_user = username_input.text
                         select_player_mode_screen(screen)
                     else:
                         last_verification_state = result

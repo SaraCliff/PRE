@@ -1,6 +1,6 @@
 import pygame
 import sys
-from button import Button, TextDrawer, Personaje
+from button import Button, TextDrawer, Personaje, Database
 
 def two_player_screen(screen, personaje):
     from how_to_play_screen import how_to_play_screen
@@ -69,9 +69,11 @@ def two_player_screen(screen, personaje):
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
         selected_images = [personaje.player1, personaje.player2]
+        database = Database('userdata.db')
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                database.logout()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
