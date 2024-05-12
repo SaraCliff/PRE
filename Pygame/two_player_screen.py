@@ -102,6 +102,9 @@ def two_player_screen(screen, personaje):
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
+        pygame.draw.rect(SCREEN, (255, 255, 255), (735, 300, 200, 250), 2)
+        pygame.draw.rect(SCREEN, (255, 255, 255), (1035, 300, 200, 250), 2)
+
         pygame.display.update()
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 import pygame
 import sys
-from button import Button
+from button import Button, Personaje
 from one_player_screen import one_player_screen
 from two_player_screen import two_player_screen
 from how_to_play_screen import how_to_play_screen
@@ -29,10 +29,13 @@ def select_player_mode_screen(screen):
                                 text_input="TWO PLAYER", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
         how_to_play_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 550),
                              text_input="HOW TO PLAY", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+        sign_out_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 100),
+                                    text_input="SIGN OUT", font=get_font(40), base_color="#d7fcd4",
+                                    hovering_color="White")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT)
 
-        for button in [one_player_BUTTON, two_player_BUTTON, how_to_play_BUTTON]:
+        for button in [one_player_BUTTON, two_player_BUTTON, how_to_play_BUTTON, sign_out_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
@@ -44,13 +47,16 @@ def select_player_mode_screen(screen):
                 if one_player_BUTTON.checkForInput(MENU_MOUSE_POS):
                     one_player_screen(SCREEN)
                 if two_player_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    two_player_screen(SCREEN)
+                    two_player_screen(SCREEN,personaje)
                 if how_to_play_BUTTON.checkForInput(MENU_MOUSE_POS):
                     how_to_play_screen(SCREEN)
+
+
 
         pygame.display.update()
 
 if __name__ == "__main__":
     pygame.init()
     SCREEN = pygame.display.set_mode((1280, 720))
+    personaje = Personaje()
     select_player_mode_screen(SCREEN)

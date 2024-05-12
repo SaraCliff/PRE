@@ -71,7 +71,7 @@ class Database:
 		self.conn = sqlite3.connect(filename)
 		self.c = self.conn.cursor()
 		self.c.execute('''CREATE TABLE IF NOT EXISTS users
-                          (username TEXT PRIMARY KEY, password TEXT)''')
+                          (username TEXT PRIMARY KEY, password TEXT, SignIn INTEGER DEFAULT 0)''')
 		self.conn.commit()
 
 	def register_user(self, username, password):
@@ -87,11 +87,19 @@ class Database:
 		user = self.c.fetchone()
 		if user is not None:
 			if user[1] == password:
+				self.c.execute("UPDATE users SET SignIn=? WHERE username=?", (1, username))
+				self.conn.commit()  # Guardar los cambios en la base de datos
 				return True
 			else:
 				return "Password is incorrect"
 		else:
 			return "User doesn't exist"
+
+	def logout(self, username):
+		self.c.execute("UPDATE users SET SignIn=? WHERE username=?", (0, username))
+		self.conn.commit()
+		return "User logged out successfully"
+
 
 	def username_exists(self, username):
 		self.c.execute("SELECT * FROM users WHERE username=?", (username,))
