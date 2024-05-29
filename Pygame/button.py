@@ -3,7 +3,7 @@ import sqlite3
 import re
 
 class Button():
-	def __init__(self, image, pos, text_input, font, base_color, hovering_color):
+	def __init__(self, image, pos, text_input, font, base_color, hovering_color,image_path):
 		self.image = image
 		self.x_pos = pos[0]
 		self.y_pos = pos[1]
@@ -11,6 +11,7 @@ class Button():
 		self.base_color, self.hovering_color = base_color, hovering_color
 		self.text_input = text_input
 		self.text = self.font.render(self.text_input, True, self.base_color)
+		self.image_path = image_path
 		if self.image is None:
 			self.image = self.text
 		self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
@@ -72,7 +73,7 @@ class Database:
 		self.conn = sqlite3.connect(filename)
 		self.c = self.conn.cursor()
 		self.c.execute('''CREATE TABLE IF NOT EXISTS users
-                          (username TEXT PRIMARY KEY, password TEXT, SignIn INTEGER DEFAULT 0)''')
+                          (username TEXT PRIMARY KEY, password TEXT, SignIn INTEGER DEFAULT 0, Personaje1 TEXT)''')
 		self.conn.commit()
 
 	def register_user(self, username, password):
@@ -110,6 +111,15 @@ class Database:
 			return True
 		except Exception as e:
 			print("Error during logout:", e)
+			return False
+
+	def select_character1(self, username, selected_image_path):
+		try:
+			self.c.execute("UPDATE users SET Personaje1=? WHERE username=?", (selected_image_path, username))
+			self.conn.commit()
+			return True
+		except Exception as e:
+			print("Error during character selection:", e)
 			return False
 
 	def username_exists(self, username):
@@ -195,24 +205,22 @@ class TextDrawer2:
 			y_offset += font_height
 
 class Personaje(pygame.sprite.Sprite):
-	def __init__(self, player1=None, player2=None):
+	def __init__(self, database, player1=None, player2=None):
 		super().__init__()
+		self.database = database
 		self.player1 = player1
 		self.player2 = player2
 		self.selected_image = None
+		self.selected_character = None
 
+	def select_character(self, button):
+		self.selected_image = button.image
+		self.selected_character = button.image_path
 
-	def select_character(self, buttons):
-		selected_image = None
-		while not selected_image:
-			for event in pygame.event.get():
-				if event.type == pygame.MOUSEBUTTONDOWN:
-					for button in buttons:
-						if button.checkForInput(pygame.mouse.get_pos()):
-							selected_image = button.image
-
-		self.selected_image = selected_image
-
-		return selected_image
+	def save_selected_character(self):
+		with open("logged_in_username.txt", "r") as archivo:
+			username = archivo.read().strip()
+		if username:
+			self.database.select_character1(username, self.selected_character)
 
 

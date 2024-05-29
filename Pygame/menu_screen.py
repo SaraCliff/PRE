@@ -23,12 +23,12 @@ def main_menu(screen):
         Fondobut = pygame.image.load("assets/Options Rect.png")
 
         log_in_BUTTON = Button(image= pygame.transform.scale(Fondobut, (500, 109)), pos=(640, 250),
-                             text_input="LOG IN", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+                             text_input="LOG IN", font=get_font(75), base_color="#d7fcd4", hovering_color="White", image_path= Fondobut)
 
         OPTIONS_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 400),
-                                text_input="SIGN IN", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+                                text_input="SIGN IN", font=get_font(75), base_color="#d7fcd4", hovering_color="White",image_path= Fondobut)
         QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 550),
-                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White",image_path= Fondobut)
 
         SCREEN.blit(MENU_TEXT, MENU_RECT)
 

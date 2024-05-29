@@ -5,7 +5,7 @@ from one_player_screen import one_player_screen
 from two_player_screen import two_player_screen
 from how_to_play_screen import how_to_play_screen
 from menu_screen import main_menu
-def select_player_mode_screen(screen):
+def select_player_mode_screen(screen, personaje):
     pygame.init()
 
     BG = pygame.image.load("assets/FONDOmain.png")
@@ -25,15 +25,15 @@ def select_player_mode_screen(screen):
         Fondobut = pygame.image.load("assets/Options Rect.png")
 
         one_player_BUTTON = Button(image= pygame.transform.scale(Fondobut, (500, 109)), pos=(640, 250),
-                             text_input="ONE PLAYER", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+                             text_input="ONE PLAYER", font=get_font(40), base_color="#d7fcd4", hovering_color="White", image_path = "assets/Options Rect.png")
 
-        two_player_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 400),
-                                text_input="TWO PLAYER", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
-        how_to_play_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 550),
-                             text_input="HOW TO PLAY", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
-        log_out_BUTTON = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (175, 70)), pos=(125, 650),
+        two_player_BUTTON = Button(image=Fondobut, pos=(640, 400),
+                                text_input="TWO PLAYER", font=get_font(40), base_color="#d7fcd4", hovering_color="White", image_path = "assets/Options Rect.png")
+        how_to_play_BUTTON = Button(image=Fondobut, pos=(640, 550),
+                             text_input="HOW TO PLAY", font=get_font(40), base_color="#d7fcd4", hovering_color="White",image_path = "assets/Options Rect.png")
+        log_out_BUTTON = Button(image=pygame.transform.scale(Fondobut, (175, 70)), pos=(125, 650),
                                     text_input="LOG OUT", font=get_font(20), base_color="#d7fcd4",
-                                    hovering_color="White")
+                                    hovering_color="White", image_path = "assets/Options Rect.png")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT)
         database = Database('userdata.db')
@@ -62,5 +62,5 @@ def select_player_mode_screen(screen):
 if __name__ == "__main__":
     pygame.init()
     SCREEN = pygame.display.set_mode((1280, 720))
-    personaje = Personaje()
-    select_player_mode_screen(SCREEN)
+    personaje = Personaje(database = "userdata.db")
+    select_player_mode_screen(SCREEN, personaje)

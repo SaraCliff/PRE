@@ -1,6 +1,6 @@
 import pygame
 import sys
-from button import InputText, Database, Button, TextDrawer
+from button import InputText, Database, Button, TextDrawer, Personaje
 
 
 def log_in_screen(screen):
@@ -29,10 +29,10 @@ def log_in_screen(screen):
 
     log_in_button = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (300, 80)),
                            pos=(WIDTH // 2, HEIGHT // 2 + 300), text_input="LOG IN", font=get_font(35),
-                           base_color="#d7fcd4", hovering_color="White")
+                           base_color="#d7fcd4", hovering_color="White",image_path="assets/Options Rect.png")
     back_button = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (200, 40)),
                          pos=(WIDTH // 7, HEIGHT // 2 + 300), text_input="BACK", font=get_font(35),
-                         base_color="#d7fcd4", hovering_color="White")
+                         base_color="#d7fcd4", hovering_color="White",image_path="assets/Options Rect.png")
 
     last_verification_state = None
     message_bg = pygame.transform.scale(pygame.image.load("assets/Quit Rect.png"), (500, 100))
@@ -59,7 +59,8 @@ def log_in_screen(screen):
                 if log_in_button.checkForInput(event.pos):
                     result = database.login(username_input.text, password_input.text)
                     if result == True:
-                        select_player_mode_screen(screen)
+                        personaje = Personaje(database = "userdata.db")
+                        select_player_mode_screen(screen,personaje)
                     else:
                         last_verification_state = result
                 if back_button.checkForInput(event.pos):
