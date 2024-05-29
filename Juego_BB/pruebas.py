@@ -37,7 +37,7 @@ generada_collision_height = 20
 
 flechas = []
 
-# Cargar y transformar las imágenes de flechas una vez
+
 referencia_images = {
     "left": pygame.transform.scale(pygame.image.load("arrow_left.png").convert_alpha(), (flecha_width, flecha_height)),
     "up": pygame.transform.scale(pygame.image.load("arrow_up.png").convert_alpha(), (flecha_width, flecha_height)),
@@ -81,7 +81,7 @@ class Paula(pygame.sprite.Sprite):
         self.index = (self.index + 1) % len(self.images)
         self.image = self.images[self.index]
 
-# Función para generar flechas
+
 def generar_flechas(file_path, beat_count, corchea):
     with open(file_path, 'r') as file:
         lines = file.readlines()
@@ -101,7 +101,7 @@ def generar_flechas(file_path, beat_count, corchea):
                     flecha = Flecha(referencia_images[columna], x, y, velocidad_px_ms)
                     flechas.append(flecha)
 
-# Función para manejar colisiones y sumar puntos
+
 def manejar_colision(tecla):
     global puntos
     for flecha in flechas:
@@ -162,7 +162,7 @@ paula_images = {
 }
 
 # Crear instancia de Paula
-paula = Paula(list(paula_images.values()), 200, 600)  # x, y son las coordenadas donde quieres que aparezca Paula
+paula = Paula(list(paula_images.values()), 500, 400)  # x, y son las coordenadas donde quieres que aparezca Paula
 
 # Bucle principal del juego
 running = True
