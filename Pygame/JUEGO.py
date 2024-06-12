@@ -5,7 +5,8 @@ pygame.init()
 screen_width = 1920
 screen_height = 1040
 
-# Configurar el modo de video
+ancho = 500
+alto = 1000
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Juego de Ritmo")
 
@@ -13,6 +14,7 @@ pygame.display.set_caption("Juego de Ritmo")
 fondo_de_pantalla = pygame.image.load("FONDO_CUPIDO.png").convert()
 fondo_de_pantalla = pygame.transform.scale(fondo_de_pantalla, (screen_width, screen_height))
 
+WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 
 clock = pygame.time.Clock()
@@ -36,7 +38,6 @@ generada_collision_height = 20
 
 flechas = []
 
-# Cargar y transformar las imágenes de flechas una vez
 referencia_images = {
     "left": pygame.transform.scale(pygame.image.load("arrow_left.png").convert_alpha(), (flecha_width, flecha_height)),
     "up": pygame.transform.scale(pygame.image.load("arrow_up.png").convert_alpha(), (flecha_width, flecha_height)),
@@ -45,10 +46,10 @@ referencia_images = {
 }
 
 referencia_positions = {
-    "left": (300, 500),
-    "up": (400, 500),
-    "down": (500, 500),
-    "right": (600, 500)
+    "left": (50, 50),
+    "up": (150, 50),
+    "down": (250, 50),
+    "right": (350, 50)
 }
 
 class Flecha(pygame.sprite.Sprite):
@@ -65,10 +66,21 @@ class Flecha(pygame.sprite.Sprite):
         )
 
     def update(self):
-        self.rect.y += self.velocidad
+        self.rect.y -= self.velocidad
         self.collision_rect.y = self.rect.centery - generada_collision_height // 2
 
-# Función para generar flechas
+class Paula(pygame.sprite.Sprite):
+    def __init__(self, images, x, y):
+        super().__init__()
+        self.images = images
+        self.index = 0
+        self.image = self.images[self.index]
+        self.rect = self.image.get_rect(topleft=(x, y))
+
+    def update(self):
+        self.index = (self.index + 1) % len(self.images)
+        self.image = self.images[self.index]
+
 def generar_flechas(file_path, beat_count, corchea):
     with open(file_path, 'r') as file:
         lines = file.readlines()
@@ -78,54 +90,56 @@ def generar_flechas(file_path, beat_count, corchea):
                 if corchea and char in '5678':  # Generar flechas para corcheas
                     columna = "left" if char == '5' else "up" if char == '6' else "down" if char == '7' else "right"
                     x = referencia_positions[columna][0]
-                    y = 10
+                    y = screen_height - 10
                     flecha = Flecha(referencia_images[columna], x, y, velocidad_px_ms)
                     flechas.append(flecha)
                 elif not corchea and char in '1234':  # Generar flechas para beats normales
                     columna = "left" if char == '1' else "up" if char == '2' else "down" if char == '3' else "right"
                     x = referencia_positions[columna][0]
-                    y = 10
+                    y = screen_height - 10
                     flecha = Flecha(referencia_images[columna], x, y, velocidad_px_ms)
                     flechas.append(flecha)
 
-# Función para manejar colisiones y sumar puntos
+def chequear_colision(flecha, posicion_referencia):
+    return flecha.collision_rect.colliderect(pygame.Rect(
+        posicion_referencia[0] + flecha_width // 2 - collision_rect_margin,
+        posicion_referencia[1] + flecha_height // 2 - collision_rect_margin,
+        collision_rect_margin * 2, collision_rect_margin * 2))
+
 def manejar_colision(tecla):
     global puntos
-    for flecha in flechas:
-        if tecla == pygame.K_LEFT and flecha.collision_rect.colliderect(pygame.Rect(
-            referencia_positions["left"][0] + flecha_width // 2 - collision_rect_margin,
-            referencia_positions["left"][1] + flecha_height // 2 - collision_rect_margin,
-            collision_rect_margin * 2, collision_rect_margin * 2)):
-            flechas.remove(flecha)
-            puntos += 1
-            break
-        elif tecla == pygame.K_UP and flecha.collision_rect.colliderect(pygame.Rect(
-            referencia_positions["up"][0] + flecha_width // 2 - collision_rect_margin,
-            referencia_positions["up"][1] + flecha_height // 2 - collision_rect_margin,
-            collision_rect_margin * 2, collision_rect_margin * 2)):
-            flechas.remove(flecha)
-            puntos += 1
-            break
-        elif tecla == pygame.K_DOWN and flecha.collision_rect.colliderect(pygame.Rect(
-            referencia_positions["down"][0] + flecha_width // 2 - collision_rect_margin,
-            referencia_positions["down"][1] + flecha_height // 2 - collision_rect_margin,
-            collision_rect_margin * 2, collision_rect_margin * 2)):
-            flechas.remove(flecha)
-            puntos += 1
-            break
-        elif tecla == pygame.K_RIGHT and flecha.collision_rect.colliderect(pygame.Rect(
-            referencia_positions["right"][0] + flecha_width // 2 - collision_rect_margin,
-            referencia_positions["right"][1] + flecha_height // 2 - collision_rect_margin,
-            collision_rect_margin * 2, collision_rect_margin * 2)):
-            flechas.remove(flecha)
-            puntos += 1
-            break
-        elif tecla == pygame.K_p:
-            # Cambiar la imagen de Paula según el estado actual
-            if paula.image == paula_images["arriba"]:
-                paula.image = paula_images["abajo"]
-            else:
-                paula.image = paula_images["arriba"]
+
+    # Diccionario para asociar teclas con posiciones de referencia
+    teclas_posiciones = {
+        pygame.K_LEFT: referencia_positions["left"],
+        pygame.K_UP: referencia_positions["up"],
+        pygame.K_DOWN: referencia_positions["down"],
+        pygame.K_RIGHT: referencia_positions["right"]
+    }
+
+    # Diccionario para asociar teclas con imágenes de Paula
+    teclas_imagenes = {
+        pygame.K_LEFT: paula_images["izquierda"],
+        pygame.K_UP: paula_images["arriba"],
+        pygame.K_DOWN: paula_images["abajo"],
+        pygame.K_RIGHT: paula_images["derecha"]
+    }
+
+    # Primero, cambiar la imagen de Paula
+    if tecla in teclas_imagenes:
+        paula.image = teclas_imagenes[tecla]
+
+    # Luego, manejar la colisión
+    if tecla in teclas_posiciones:
+        for flecha in flechas:
+            if chequear_colision(flecha, teclas_posiciones[tecla]):
+                flechas.remove(flecha)
+                puntos += 1
+                break
+
+    # Manejo especial para la tecla 'p'
+    if tecla == pygame.K_p:
+        paula.update()
 
 # Inicialización de variables
 tiempo_ultimo_beat = pygame.time.get_ticks()
@@ -134,7 +148,20 @@ beat_count = 0
 puntos = 0
 
 # Fuente para el texto del puntaje
-font = pygame.font.SysFont(None, 36)
+def get_font(size):
+    return pygame.font.Font("assets/font.ttf", size)
+font = get_font(32)
+
+# Cargar imágenes de Paula
+paula_images = {
+    "arriba": pygame.transform.scale(pygame.image.load("paula_arriba.png").convert_alpha(), (ancho, alto)),
+    "abajo": pygame.transform.scale(pygame.image.load("paula_abajo.png").convert_alpha(), (ancho, alto)),
+    "izquierda": pygame.transform.scale(pygame.image.load("paula_izquierda.png").convert_alpha(), (ancho, alto)),
+    "derecha": pygame.transform.scale(pygame.image.load("paula_derecha.png").convert_alpha(), (ancho, alto))
+}
+
+# Crear instancia de Paula
+paula = Paula(list(paula_images.values()), 900, 50)  # x, y son las coordenadas donde quieres que aparezca Paula
 
 # Bucle principal del juego
 running = True
@@ -162,7 +189,7 @@ while running:
         flecha.update()
 
     # Eliminar las flechas que salen de la pantalla
-    flechas = [flecha for flecha in flechas if flecha.rect.top < screen_height]
+    flechas = [flecha for flecha in flechas if flecha.rect.bottom > 0]
 
     # Dibujar fondo de pantalla
     screen.blit(fondo_de_pantalla, (0, 0))
@@ -175,8 +202,11 @@ while running:
     for direction, image in referencia_images.items():
         screen.blit(image, referencia_positions[direction])
 
+    # Dibujar a Paula
+    screen.blit(paula.image, paula.rect)
+
     # Mostrar puntaje en la pantalla
-    score_text = font.render(f"Puntaje: {puntos}", True, GREEN)
+    score_text = font.render(f"Puntaje: {puntos}", True, WHITE)
     screen.blit(score_text, (screen_width - score_text.get_width() - 10, 10))
 
     pygame.display.flip()
@@ -184,4 +214,3 @@ while running:
     clock.tick(60)
 
 pygame.quit()
-
