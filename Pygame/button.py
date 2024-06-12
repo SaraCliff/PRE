@@ -122,6 +122,17 @@ class Database:
 			print("Error during character selection:", e)
 			return False
 
+	def select_character2(self, username, selected_image_path):
+		try:
+			self.c.execute("UPDATE users SET Personaje2=? WHERE username=?", (selected_image_path, username))
+			self.conn.commit()
+			return True
+		except Exception as e:
+			print("Error during character selection:", e)
+			return False
+
+
+
 	def username_exists(self, username):
 		self.c.execute("SELECT * FROM users WHERE username=?", (username,))
 		return self.c.fetchone() is not None
@@ -217,10 +228,21 @@ class Personaje(pygame.sprite.Sprite):
 		self.selected_image = button.image
 		self.selected_character = button.image_path
 
+	def update_player1(self):
+		self.player1 = self.selected_image
+
+	def update_player2(self):
+		self.player2 = self.selected_image
 	def save_selected_character(self):
 		with open("logged_in_username.txt", "r") as archivo:
 			username = archivo.read().strip()
 		if username:
 			self.database.select_character1(username, self.selected_character)
+
+	def save_selected_character2(self):
+		with open("logged_in_username.txt", "r") as archivo:
+			username = archivo.read().strip()
+		if username:
+			self.database.select_character2(username, self.selected_character)
 
 
