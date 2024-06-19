@@ -5,7 +5,8 @@ pygame.init()
 screen_width = 1920
 screen_height = 1040
 
-# Configurar el modo de video
+ancho= 500
+alto= 1000
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Juego de Ritmo")
 
@@ -142,6 +143,12 @@ def manejar_colision(tecla):
         elif tecla == pygame.K_RIGHT:
             # Cambiar la imagen de Paula hacia la derecha
             paula.image = paula_images["derecha"]
+        elif tecla == pygame.K_DOWN:
+            # Cambiar la imagen de Paula hacia la derecha
+            paula.image = paula_images["abajo"]
+        elif tecla == pygame.K_UP:
+            # Cambiar la imagen de Paula hacia la izquierda
+            paula.image = paula_images["arriba"]
 
 
 # Inicialización de variables
@@ -155,14 +162,14 @@ font = pygame.font.SysFont(None, 36)
 
 # Cargar imágenes de Paula
 paula_images = {
-    "arriba": pygame.transform.scale(pygame.image.load("paula_arriba.png").convert_alpha(), (flecha_width, flecha_height)),
-    "abajo": pygame.transform.scale(pygame.image.load("paula_abajo.png").convert_alpha(), (flecha_width, flecha_height)),
-    "izquierda": pygame.transform.scale(pygame.image.load("paula_izquierda.png").convert_alpha(), (flecha_width, flecha_height)),
-    "derecha": pygame.transform.scale(pygame.image.load("paula_derecha.png").convert_alpha(), (flecha_width, flecha_height))
+    "arriba": pygame.transform.scale(pygame.image.load("paula_arriba.png").convert_alpha(), (ancho, alto)),
+    "abajo": pygame.transform.scale(pygame.image.load("paula_abajo.png").convert_alpha(), (ancho, alto)),
+    "izquierda": pygame.transform.scale(pygame.image.load("paula_izquierda.png").convert_alpha(), (ancho, alto)),
+    "derecha": pygame.transform.scale(pygame.image.load("paula_derecha.png").convert_alpha(), (ancho, alto))
 }
 
 # Crear instancia de Paula
-paula = Paula(list(paula_images.values()), 500, 400)  # x, y son las coordenadas donde quieres que aparezca Paula
+paula = Paula(list(paula_images.values()), 900, 50)  # x, y son las coordenadas donde quieres que aparezca Paula
 
 # Bucle principal del juego
 running = True
