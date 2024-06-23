@@ -12,7 +12,7 @@ def top_puntuacion(screen, database):
         return pygame.font.Font("assets/font.ttf", size)
 
     db = Database(database)
-    top5_scores = db.get_top5_scores()
+    top5_scores = db.get_top5_scores(column = db.get_cancion_jugada())
 
     while True:
         SCREEN = screen

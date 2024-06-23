@@ -138,11 +138,11 @@ class Database:
 			print("Error during character selection:", e)
 			return False
 
-	def get_top5_scores(self):
+	def get_top5_scores(self, column):
 		with open("logged_in_username.txt", "r") as archivo:
 			username = archivo.read().strip()
 		if username:
-			self.c.execute("SELECT Top5_smiths FROM users WHERE username=?", (username,))
+			self.c.execute(f"SELECT {column} FROM users WHERE username=?", (username,))
 			result = self.c.fetchone()
 			if result and result[0]:
 				try:
@@ -161,23 +161,23 @@ class Database:
 		self.c.execute("SELECT * FROM users WHERE username=?", (username,))
 		return self.c.fetchone() is not None
 
-	def save_score(self, score):
+	def save_score(self, score, column):
 		with open("logged_in_username.txt", "r") as archivo:
 			username = archivo.read().strip()
 		if username:
-			self.c.execute("SELECT Top5_smiths FROM users WHERE username=?", (username,))
+			self.c.execute(f"SELECT {column} FROM users WHERE username=?", (username,))
 			result = self.c.fetchone()
 			if result and result[0]:
 				try:
 					scores = ast.literal_eval(result[0])
 					scores.append(score)
-					self.c.execute("UPDATE users SET Top5_smiths=? WHERE username=?", (str(scores), username))
+					self.c.execute(f"UPDATE users SET {column}=? WHERE username=?", (str(scores), username))
 					self.conn.commit()
 				except (ValueError, SyntaxError) as e:
 					print(f"Error updating scores: {e}")
 			else:
 				scores = [score]
-				self.c.execute("UPDATE users SET Top5_smiths=? WHERE username=?", (str(scores), username))
+				self.c.execute(f"UPDATE users SET {column}=? WHERE username=?", (str(scores), username))
 				self.conn.commit()
 
 	def borrar_personaje1(self):
@@ -207,6 +207,19 @@ class Database:
 		except Exception as e:
 			print("Error during deleting Personaje2:", e)
 			return False
+
+	def get_cancion_jugada(self):
+		with open("logged_in_username.txt", "r") as archivo:
+			username = archivo.read().strip()
+		if username:
+			self.c.execute("SELECT Cancion_jugada FROM users WHERE username=?", (username,))
+			result = self.c.fetchone()
+			if result and result[0]:
+				return result[0]  # Devuelve directamente el valor de la columna Cancion_jugada
+			else:
+				return None
+		else:
+			return None
 
 class User:
 	def __init__(self, username, password, repeat_password):

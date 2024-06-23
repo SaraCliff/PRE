@@ -20,10 +20,10 @@ GREEN = (0, 255, 0)
 
 clock = pygame.time.Clock()
 
-pygame.mixer.music.load("There Is a Light That Never Goes Out.mp3")
+pygame.mixer.music.load("Jeff Hardy.mp3")
 pygame.mixer.music.play(0)  # Reproducción en bucle
 
-bpm = 136
+bpm = 122
 beat_interval_ms = (60 * 1000) / bpm
 corchea_interval_ms = beat_interval_ms / 2  # Corcheas al doble de velocidad
 velocidad_px_ms = 10
@@ -168,12 +168,12 @@ while running:
 
     tiempo_actual = pygame.time.get_ticks()
     if tiempo_actual - tiempo_ultimo_beat >= beat_interval_ms:
-        generar_flechas("smiths.txt", beat_count, corchea=False)
+        generar_flechas("Blnko.txt", beat_count, corchea=False)
         tiempo_ultimo_beat = tiempo_actual
         beat_count += 1
 
     if tiempo_actual - tiempo_ultima_corchea >= corchea_interval_ms:
-        generar_flechas("smiths.txt", beat_count, corchea=True)
+        generar_flechas("Blnko.txt", beat_count, corchea=True)
         tiempo_ultima_corchea = tiempo_actual
 
     for flecha in flechas:
@@ -204,4 +204,3 @@ top_puntuacion(screen, 'userdata.db')
 
 pygame.quit()
 sys.exit()
-

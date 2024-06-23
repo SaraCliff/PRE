@@ -23,7 +23,7 @@ clock = pygame.time.Clock()
 pygame.mixer.music.load("3 de febrero.mp3")
 pygame.mixer.music.play(0)  # Reproducción en bucle
 
-bpm = 136
+bpm = 82
 beat_interval_ms = (60 * 1000) / bpm
 corchea_interval_ms = beat_interval_ms / 2  # Corcheas al doble de velocidad
 velocidad_px_ms = 10
@@ -199,7 +199,7 @@ while running:
     clock.tick(60)
 
 # Guardar la puntuación al terminar la partida
-db.save_score(puntos)
+db.save_score(puntos, column= db.get_cancion_jugada())
 top_puntuacion(screen, 'userdata.db')
 
 pygame.quit()
