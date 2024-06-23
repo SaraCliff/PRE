@@ -54,6 +54,9 @@ def one_player_screen(screen):
     log_out_BUTTON = Button(image=pygame.transform.scale(images[0], (150, 70)), pos=(1150, 50),
                             text_input="LOG OUT", font=get_font(15), base_color="#d7fcd4",
                             hovering_color="White", image_path=image_paths[0])
+    Quit_BUTTON = Button(image=pygame.transform.scale(images[0], (125, 70)), pos=(75, 50),
+                         text_input="Quit", font=get_font(20), base_color="#d7fcd4",
+                         hovering_color="White", image_path="assets/Options Rect.png")
 
     database = Database('userdata.db')
     personaje = Personaje(database)
@@ -73,10 +76,14 @@ def one_player_screen(screen):
                     personaje.save_selected_character()
                     how_to_play_screen(SCREEN)
                 if back_button.checkForInput(MENU_MOUSE_POS):
-                    select_player_mode_screen(SCREEN, personaje)
+                    select_player_mode_screen(SCREEN, personaje, database = "userdata.db")
                 if log_out_BUTTON.checkForInput(MENU_MOUSE_POS):
                     database.logout()
-                    main_menu(SCREEN)
+                    main_menu(SCREEN, database = "userdata.db")
+                if Quit_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    database.logout()
+                    pygame.quit()
+                    sys.exit()
                 for button in buttons:
                     if button.checkForInput(MENU_MOUSE_POS):
                         personaje.select_character(button)
@@ -90,7 +97,7 @@ def one_player_screen(screen):
         if personaje.selected_image is not None:
             screen.blit(pygame.transform.scale(personaje.selected_image, (200, 250)), (935, 300))
 
-        for button in buttons + [ready_button, back_button, log_out_BUTTON]:
+        for button in buttons + [ready_button, back_button, log_out_BUTTON, Quit_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
