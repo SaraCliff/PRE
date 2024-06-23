@@ -4,7 +4,7 @@ from button import Button
 from Log_in_screen import log_in_screen
 from sign_in_screen import sign_in_screen
 
-def main_menu(screen):
+def main_menu(screen,database):
     pygame.init()
     BG = pygame.image.load("assets/FONDOmain.png")
     BG = pygame.transform.scale(BG, (1280, 720))
@@ -42,7 +42,7 @@ def main_menu(screen):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if log_in_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    log_in_screen(SCREEN)
+                    log_in_screen(SCREEN,database = "userdata.db")
                 if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
                     sign_in_screen(SCREEN)
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
@@ -54,4 +54,4 @@ def main_menu(screen):
 if __name__ == "__main__":
     pygame.init()
     SCREEN = pygame.display.set_mode((1280, 720))
-    main_menu(SCREEN)
+    main_menu(SCREEN,database = "userdata.db")

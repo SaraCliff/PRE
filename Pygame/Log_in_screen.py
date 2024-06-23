@@ -3,9 +3,10 @@ import sys
 from button import InputText, Database, Button, TextDrawer, Personaje
 
 
-def log_in_screen(screen):
+def log_in_screen(screen,database):
     from menu_screen import main_menu
     from select_player_mode_screen import select_player_mode_screen
+    database = "userdata.db"
     pygame.init()
     WIDTH, HEIGHT = 1280, 720
     WHITE = (255, 255, 255)
@@ -35,7 +36,7 @@ def log_in_screen(screen):
                          base_color="#d7fcd4", hovering_color="White",image_path="assets/Options Rect.png")
 
     last_verification_state = None
-    message_bg = pygame.transform.scale(pygame.image.load("assets/Quit Rect.png"), (500, 100))
+    message_bg = pygame.transform.scale(pygame.image.load("assets/Quit Rect.png"), (600, 100))
 
     while True:
         screen.blit(BG, (0, 0))
@@ -60,13 +61,12 @@ def log_in_screen(screen):
                     result = database.login(username_input.text, password_input.text)
                     if result == True:
                         personaje = Personaje(database = "userdata.db")
-                        select_player_mode_screen(screen,personaje)
+                        select_player_mode_screen(screen,personaje,database = "userdata.db")
                     else:
                         last_verification_state = result
                 if back_button.checkForInput(event.pos):
-                    main_menu(screen)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                main_menu(screen)
+                    main_menu(screen, database = "userdata.db")
+
 
         pygame.draw.rect(screen, GRAY, (WIDTH // 4 + 275, HEIGHT // 3, WIDTH // 4, 40))
         pygame.draw.rect(screen, GRAY, (WIDTH // 4 + 275, HEIGHT // 3 + 80, WIDTH // 4, 40))
@@ -91,6 +91,7 @@ def log_in_screen(screen):
 if __name__ == "__main__":
     pygame.init()
     SCREEN = pygame.display.set_mode((1280, 720))
-    log_in_screen(SCREEN)
+    database = "userdata.db"
+    log_in_screen(SCREEN,database)
 
 

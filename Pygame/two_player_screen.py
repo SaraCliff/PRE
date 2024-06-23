@@ -2,7 +2,7 @@ import pygame
 import sys
 from button import Button, TextDrawer, Personaje, Database
 
-def two_player_screen(screen, personaje):
+def two_player_screen(screen, personaje,database):
     from how_to_play_screen import how_to_play_screen
     from select_player_mode_screen import select_player_mode_screen
     from menu_screen import main_menu
@@ -11,6 +11,11 @@ def two_player_screen(screen, personaje):
     HEIGHT = 720
     BG = pygame.image.load("assets/fondo2.jpg")
     BG = pygame.transform.scale(BG, (WIDTH, HEIGHT))
+
+    SCREEN = pygame.display.set_mode((1280, 720))
+    database = Database('userdata.db')
+    personaje = Personaje(database)  # Crear una instancia de la clase Personaje sin valores iniciales
+
 
     def get_font(size):
         return pygame.font.Font("assets/font.ttf", size)
@@ -73,6 +78,9 @@ def two_player_screen(screen, personaje):
                             pos=(1150, 50),
                             text_input="LOG OUT", font=get_font(15), base_color="#d7fcd4",
                             hovering_color="White", image_path="assets/Options Rect.png")
+    Quit_BUTTON = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (125, 70)), pos=(75, 50),
+                        text_input="QUIT", font=get_font(20), base_color="#d7fcd4",
+                        hovering_color="White", image_path="assets/Options Rect.png")
 
     while True:
         SCREEN = screen
@@ -94,10 +102,14 @@ def two_player_screen(screen, personaje):
                         personaje.save_selected_character2()
                         how_to_play_screen(SCREEN)
                 if back_button.checkForInput(MENU_MOUSE_POS):
-                    select_player_mode_screen(SCREEN, personaje)
+                    select_player_mode_screen(SCREEN, personaje,database)
                 if log_out_BUTTON.checkForInput(MENU_MOUSE_POS):
                     database.logout()
-                    main_menu(SCREEN)
+                    main_menu(SCREEN,database)
+                if Quit_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    database.logout()
+                    pygame.quit()
+                    sys.exit()
                 for button in buttons:
                     if button.checkForInput(MENU_MOUSE_POS):
                         personaje.select_character(button)
@@ -120,7 +132,7 @@ def two_player_screen(screen, personaje):
         if selected_images[1] is not None:
             SCREEN.blit(pygame.transform.scale(selected_images[1], (200, 250)), (1035, 300))
 
-        for button in buttons + player_buttons + [ready_button, back_button, log_out_BUTTON]:
+        for button in buttons + player_buttons + [ready_button, back_button, log_out_BUTTON,Quit_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
@@ -134,4 +146,4 @@ if __name__ == "__main__":
     SCREEN = pygame.display.set_mode((1280, 720))
     database = Database('userdata.db')
     personaje = Personaje(database)  # Crear una instancia de la clase Personaje sin valores iniciales
-    two_player_screen(SCREEN, personaje)
+    two_player_screen(SCREEN, personaje,database)

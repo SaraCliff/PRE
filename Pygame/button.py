@@ -1,6 +1,7 @@
 import pygame
 import sqlite3
 import re
+import ast
 
 class Button():
 	def __init__(self, image, pos, text_input, font, base_color, hovering_color,image_path):
@@ -88,6 +89,8 @@ class Database:
 		self.c.execute("SELECT * FROM users WHERE username=?", (username,))
 		user = self.c.fetchone()
 		if user is not None:
+			if user[2] == 1:  # Verificar si el usuario ya está logueado
+				return "User is already logged in"
 			if user[1] == password:
 				self.c.execute("UPDATE users SET SignIn=? WHERE username=?", (1, username))
 				self.conn.commit()  # Guardar los cambios en la base de datos
@@ -98,6 +101,8 @@ class Database:
 				return "Password is incorrect"
 		else:
 			return "User doesn't exist"
+
+
 
 	def logout(self):
 		try:
@@ -112,6 +117,8 @@ class Database:
 		except Exception as e:
 			print("Error during logout:", e)
 			return False
+
+
 
 	def select_character1(self, username, selected_image_path):
 		try:
@@ -131,12 +138,75 @@ class Database:
 			print("Error during character selection:", e)
 			return False
 
-
+	def get_top5_scores(self):
+		with open("logged_in_username.txt", "r") as archivo:
+			username = archivo.read().strip()
+		if username:
+			self.c.execute("SELECT Top5_smiths FROM users WHERE username=?", (username,))
+			result = self.c.fetchone()
+			if result and result[0]:
+				try:
+					scores = ast.literal_eval(result[0])
+					top5_scores = sorted(set(scores), reverse=True)[:5]  # Usa un set para eliminar duplicados
+					return top5_scores
+				except (ValueError, SyntaxError) as e:
+					print(f"Error parsing top5 scores: {e}")
+					return None
+			else:
+				return None
+		else:
+			return None
 
 	def username_exists(self, username):
 		self.c.execute("SELECT * FROM users WHERE username=?", (username,))
 		return self.c.fetchone() is not None
 
+	def save_score(self, score):
+		with open("logged_in_username.txt", "r") as archivo:
+			username = archivo.read().strip()
+		if username:
+			self.c.execute("SELECT Top5_smiths FROM users WHERE username=?", (username,))
+			result = self.c.fetchone()
+			if result and result[0]:
+				try:
+					scores = ast.literal_eval(result[0])
+					scores.append(score)
+					self.c.execute("UPDATE users SET Top5_smiths=? WHERE username=?", (str(scores), username))
+					self.conn.commit()
+				except (ValueError, SyntaxError) as e:
+					print(f"Error updating scores: {e}")
+			else:
+				scores = [score]
+				self.c.execute("UPDATE users SET Top5_smiths=? WHERE username=?", (str(scores), username))
+				self.conn.commit()
+
+	def borrar_personaje1(self):
+		try:
+			with open("logged_in_username.txt", "r") as archivo:
+				username = archivo.read().strip()
+			if username:
+				self.c.execute("UPDATE users SET Personaje1=? WHERE username=?", (None, username))
+				self.conn.commit()
+				return True
+			else:
+				return False
+		except Exception as e:
+			print("Error during deleting Personaje1:", e)
+			return False
+
+	def borrar_personaje2(self):
+		try:
+			with open("logged_in_username.txt", "r") as archivo:
+				username = archivo.read().strip()
+			if username:
+				self.c.execute("UPDATE users SET Personaje2=? WHERE username=?", (None, username))
+				self.conn.commit()
+				return True
+			else:
+				return False
+		except Exception as e:
+			print("Error during deleting Personaje2:", e)
+			return False
 
 class User:
 	def __init__(self, username, password, repeat_password):
@@ -234,10 +304,14 @@ class Personaje(pygame.sprite.Sprite):
 	def update_player2(self):
 		self.player2 = self.selected_image
 	def save_selected_character(self):
-		with open("logged_in_username.txt", "r") as archivo:
-			username = archivo.read().strip()
-		if username:
-			self.database.select_character1(username, self.selected_character)
+		try:
+			with open("logged_in_username.txt", "r") as archivo:
+				username = archivo.read().strip()
+			if username:
+				self.database.select_character1(username, self.selected_character)
+		except Exception as e:
+			print("Error saving selected character:", e)
+
 
 	def save_selected_character2(self):
 		with open("logged_in_username.txt", "r") as archivo:
