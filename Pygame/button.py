@@ -94,7 +94,7 @@ class Database:
 			if user[1] == password:
 				self.c.execute("UPDATE users SET SignIn=? WHERE username=?", (1, username))
 				self.conn.commit()  # Guardar los cambios en la base de datos
-				with open("logged_in_username.txt", "w") as archivo:
+				with open("Logged_in_username.txt", "w") as archivo:
 					archivo.write(username)
 				return True
 			else:
@@ -106,17 +106,29 @@ class Database:
 
 	def logout(self):
 		try:
-			with open("logged_in_username.txt", "r") as archivo:
+			with open("Logged_in_username.txt", "r") as archivo:
 				username = archivo.read().strip()
 			if username:  # Si hay un usuario conectado
 				self.c.execute("UPDATE users SET SignIn=? WHERE username=?", (0, username))
 				self.conn.commit()
-				with open("logged_in_username.txt", "w") as archivo:
+				with open("Logged_in_username.txt", "w") as archivo:
 					archivo.write("")  # Borra el nombre de usuario del archivo
 			return True
 		except Exception as e:
 			print("Error during logout:", e)
 			return False
+
+	def actualizar_cancion_jugada(self, cancion):
+		try:
+			with open("Logged_in_username.txt", "r") as archivo:
+				username = archivo.read().strip()
+			if username:  # Si hay un usuario conectado
+				self.c.execute("UPDATE users SET cancion_jugada=? WHERE username=?", (cancion, username))
+				self.conn.commit()
+				return True
+		except Exception as e:
+			print("Error durante la actualización de la canción jugada:", e)
+		return False
 
 
 
@@ -139,7 +151,7 @@ class Database:
 			return False
 
 	def get_top5_scores(self, column):
-		with open("logged_in_username.txt", "r") as archivo:
+		with open("Logged_in_username.txt", "r") as archivo:
 			username = archivo.read().strip()
 		if username:
 			self.c.execute(f"SELECT {column} FROM users WHERE username=?", (username,))
@@ -162,7 +174,7 @@ class Database:
 		return self.c.fetchone() is not None
 
 	def save_score(self, score, column):
-		with open("logged_in_username.txt", "r") as archivo:
+		with open("Logged_in_username.txt", "r") as archivo:
 			username = archivo.read().strip()
 		if username:
 			self.c.execute(f"SELECT {column} FROM users WHERE username=?", (username,))
@@ -182,7 +194,7 @@ class Database:
 
 	def borrar_personaje1(self):
 		try:
-			with open("logged_in_username.txt", "r") as archivo:
+			with open("Logged_in_username.txt", "r") as archivo:
 				username = archivo.read().strip()
 			if username:
 				self.c.execute("UPDATE users SET Personaje1=? WHERE username=?", (None, username))
@@ -196,7 +208,7 @@ class Database:
 
 	def borrar_personaje2(self):
 		try:
-			with open("logged_in_username.txt", "r") as archivo:
+			with open("Logged_in_username.txt", "r") as archivo:
 				username = archivo.read().strip()
 			if username:
 				self.c.execute("UPDATE users SET Personaje2=? WHERE username=?", (None, username))
@@ -209,10 +221,23 @@ class Database:
 			return False
 
 	def get_cancion_jugada(self):
-		with open("logged_in_username.txt", "r") as archivo:
+		with open("Logged_in_username.txt", "r") as archivo:
 			username = archivo.read().strip()
 		if username:
 			self.c.execute("SELECT Cancion_jugada FROM users WHERE username=?", (username,))
+			result = self.c.fetchone()
+			if result and result[0]:
+				return result[0]  # Devuelve directamente el valor de la columna Cancion_jugada
+			else:
+				return None
+		else:
+			return None
+
+	def get_personaje1(self):
+		with open("Logged_in_username.txt", "r") as archivo:
+			username = archivo.read().strip()
+		if username:
+			self.c.execute("SELECT Personaje1 FROM users WHERE username=?", (username,))
 			result = self.c.fetchone()
 			if result and result[0]:
 				return result[0]  # Devuelve directamente el valor de la columna Cancion_jugada
@@ -318,7 +343,7 @@ class Personaje(pygame.sprite.Sprite):
 		self.player2 = self.selected_image
 	def save_selected_character(self):
 		try:
-			with open("logged_in_username.txt", "r") as archivo:
+			with open("Logged_in_username.txt", "r") as archivo:
 				username = archivo.read().strip()
 			if username:
 				self.database.select_character1(username, self.selected_character)
@@ -327,7 +352,7 @@ class Personaje(pygame.sprite.Sprite):
 
 
 	def save_selected_character2(self):
-		with open("logged_in_username.txt", "r") as archivo:
+		with open("Logged_in_username.txt", "r") as archivo:
 			username = archivo.read().strip()
 		if username:
 			self.database.select_character2(username, self.selected_character)

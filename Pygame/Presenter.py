@@ -38,14 +38,6 @@ class Presenter:
             "right": (350, 50)
         }
 
-        paula_images = [
-            pygame.transform.scale(pygame.image.load("Imagenes/Paula/paula_arriba.png").convert_alpha(), (250, 500)),
-            pygame.transform.scale(pygame.image.load("Imagenes/Paula/paula_abajo.png").convert_alpha(), (250, 500)),
-            pygame.transform.scale(pygame.image.load("Imagenes/Paula/paula_izquierda.png").convert_alpha(), (250, 500)),
-            pygame.transform.scale(pygame.image.load("Imagenes/Paula/paula_derecha.png").convert_alpha(), (250, 500))
-        ]
-
-        self.view.cargar_paula_images(paula_images, 900, 50)
 
         self.font = pygame.font.Font("assets/font.ttf", 32)
         self.tiempo_ultimo_beat = pygame.time.get_ticks()
@@ -58,6 +50,33 @@ class Presenter:
 
         # Inicializar la base de datos
         self.db = Database('userdata.db')
+
+    def cargar_imagenes_paula(self):
+        personaje_image = self.db.get_personaje1()
+        if personaje_image:
+            if personaje_image == "Imagenes/Personajes/mariapaula.png":
+                paula_arriba = "Imagenes/Paula/paula_arriba.png"
+                paula_abajo = "Imagenes/Paula/paula_abajo.png"
+                paula_izquierda = "Imagenes/Paula/paula_izquierda.png"
+                paula_derecha = "Imagenes/Paula/paula_derecha.png"
+            elif personaje_image == "Imagenes/Personajes/sara_soto.png":
+                paula_arriba = "Imagenes/sara/sara_arriba.png"
+                paula_abajo = "Imagenes/sara/sara_abajo.png"
+                paula_izquierda = "Imagenes/sara/sara_izquierda.png"
+                paula_derecha = "Imagenes/sara/sara_derecha.png"
+            elif personaje_image == "Imagenes/Personajes/ramona.png":
+                paula_arriba = "Imagenes/ramona/ramona_arriba.png"
+                paula_abajo = "Imagenes/ramona/ramona_abajo.png"
+                paula_izquierda = "Imagenes/ramona/ramona_izquierda.png"
+                paula_derecha = "Imagenes/ramona/ramona_derecha.png"
+            else:
+                # Default: imágenes de Paula genéricas si no se reconoce el personaje
+                paula_arriba = "Imagenes/robert/robert_arriba.png"
+                paula_abajo = "Imagenes/robert/robert_abajo.png"
+                paula_izquierda = "Imagenes/robert/robert_izquierda.png"
+                paula_derecha = "Imagenes/robert/robert_derecha.png"
+
+            return paula_arriba, paula_abajo, paula_izquierda, paula_derecha
 
     def generar_flechas(self, file_path, beat_count, corchea):
         with open(file_path, 'r') as file:
@@ -111,6 +130,16 @@ class Presenter:
             self.view.actualizar_paula()
 
     def ejecutar(self):
+        paula_arriba, paula_abajo, paula_izquierda, paula_derecha = self.cargar_imagenes_paula()
+        paula_images = [
+            pygame.transform.scale(pygame.image.load(paula_arriba).convert_alpha(), (400, 500)),
+            pygame.transform.scale(pygame.image.load(paula_abajo).convert_alpha(), (400, 500)),
+            pygame.transform.scale(pygame.image.load(paula_izquierda).convert_alpha(), (400, 500)),
+            pygame.transform.scale(pygame.image.load(paula_derecha).convert_alpha(), (400, 500))
+        ]
+
+        self.view.cargar_paula_images(paula_images, 900, 50)
+
         running = True
         while running:
             for event in pygame.event.get():

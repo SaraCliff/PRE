@@ -4,8 +4,8 @@ from button import InputText, Database, Button, TextDrawer, Personaje
 
 
 def log_in_screen(screen,database):
-    from menu_screen import main_menu
-    from select_player_mode_screen import select_player_mode_screen
+    from Menu_screen import main_menu
+    from Select_player_mode_screen import select_player_mode_screen
     database = "userdata.db"
     pygame.init()
     WIDTH, HEIGHT = 1280, 720
@@ -15,7 +15,7 @@ def log_in_screen(screen,database):
     GREEN = (0, 255, 0)
     RED = (255, 0, 0)
     PINK = (186, 85, 211)
-    BG = pygame.image.load("assets/FONDOmain.png")
+    BG = pygame.image.load("Imagenes/Fondos/nubes.png")
     BG = pygame.transform.scale(BG, (1280, 720))
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Inicio de sesión")
@@ -31,8 +31,8 @@ def log_in_screen(screen,database):
     log_in_button = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (300, 80)),
                            pos=(WIDTH // 2, HEIGHT // 2 + 300), text_input="LOG IN", font=get_font(35),
                            base_color="#d7fcd4", hovering_color="White",image_path="assets/Options Rect.png")
-    back_button = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (200, 40)),
-                         pos=(WIDTH // 7, HEIGHT // 2 + 300), text_input="BACK", font=get_font(35),
+    back_button = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (200, 60)),
+                         pos=(WIDTH // 8, HEIGHT // 2 + 300), text_input="BACK", font=get_font(35),
                          base_color="#d7fcd4", hovering_color="White",image_path="assets/Options Rect.png")
 
     last_verification_state = None

@@ -1,7 +1,7 @@
 import pygame
 import sys
 from button import Button, Database
-from menu_screen import main_menu
+from Menu_screen import main_menu
 from Nivel import Nivel
 
 def select_level_screen(screen, database):
@@ -53,12 +53,15 @@ def select_level_screen(screen, database):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if level1_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    database.actualizar_cancion_jugada(cancion = "top5_chiara")
                     nivel = Nivel("MP3_files/3 de febrero.mp3", "Txt_files/chiara.txt", bpm = 81)
                     nivel.ejecutar()
                 if level2_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    database.actualizar_cancion_jugada(cancion="top5_blnko")
                     nivel = Nivel("MP3_files/Jeff Hardy.mp3", "Txt_files/Blnko.txt", bpm = 122)
                     nivel.ejecutar()
                 if level3_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    database.actualizar_cancion_jugada(cancion="top5_chiara")
                     nivel = Nivel("MP3_files/3 de febrero.mp3", "Txt_files/chiara.txt", bpm = 81)
                     nivel.ejecutar()
                 if log_out_BUTTON.checkForInput(MENU_MOUSE_POS):

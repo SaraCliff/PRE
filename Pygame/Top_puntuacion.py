@@ -1,14 +1,14 @@
 import pygame
 import sys
 from button import Button, Database  # Asegúrate de que tu clase Button esté en un archivo llamado button.py
-from menu_screen import main_menu
+from Menu_screen import main_menu
 
 
 def top_puntuacion(screen, database):
     pygame.init()
     BG = pygame.image.load("assets/FONDOmain.png")
     BG = pygame.transform.scale(BG, (1280, 720))
-    from select_level_screen import select_level_screen
+    from Select_level_screen import select_level_screen
 
     def get_font(size):  # Returns Press-Start-2P in the desired size
         return pygame.font.Font("assets/font.ttf", size)

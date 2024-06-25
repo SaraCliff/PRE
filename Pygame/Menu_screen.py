@@ -2,11 +2,11 @@ import pygame
 import sys
 from button import Button
 from Log_in_screen import log_in_screen
-from sign_in_screen import sign_in_screen
+from Sign_in_screen import sign_in_screen
 
 def main_menu(screen,database):
     pygame.init()
-    BG = pygame.image.load("assets/FONDOmain.png")
+    BG = pygame.image.load("Imagenes/Fondos/pantalla_principal.png")
     BG = pygame.transform.scale(BG, (1280, 720))
 
     def get_font(size):  # Returns Press-Start-2P in the desired size

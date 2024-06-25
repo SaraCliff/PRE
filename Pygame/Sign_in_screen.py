@@ -3,9 +3,9 @@ import sys
 from button import Button, InputText, User, TextDrawer2, TextDrawer
 
 def sign_in_screen(screen):
-    from main import main_menu
+    from Main import main_menu
     pygame.init()
-    BG = pygame.image.load("assets/fondo4.jpg")
+    BG = pygame.image.load("Imagenes/Fondos/nubes.png")
     BG = pygame.transform.scale(BG, (1280, 720))
 
     WIDTH, HEIGHT = 1280, 720
@@ -30,11 +30,11 @@ def sign_in_screen(screen):
     last_verification_state = None
 
     but = pygame.image.load("assets/Options Rect.png")
-    quit_button = Button(image=pygame.transform.scale(but,(200,40)), pos=(WIDTH // 7, HEIGHT // 2 + 300),
-                         text_input="BACK", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
+    quit_button = Button(image=pygame.transform.scale(but,(200,60)), pos=(WIDTH // 8, HEIGHT // 2 + 300),
+                         text_input="BACK", font=get_font(35), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
 
     check_button = Button(image=pygame.transform.scale(but, (300, 80)), pos=(WIDTH // 2, HEIGHT // 2 + 300),
-                          text_input="CHECK", font=get_font(50), base_color="#d7fcd4", hovering_color="White")
+                          text_input="CHECK", font=get_font(50), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
 
     verification_bg = pygame.image.load("assets/Quit Rect.png")
     verification_bg = pygame.transform.scale(verification_bg, (WIDTH // 2 + 200, 100))
@@ -56,7 +56,7 @@ def sign_in_screen(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
 
                 if quit_button.checkForInput(event.pos):
-                    main_menu(screen)
+                    main_menu(screen, database="userdata.db")
 
                 if check_button.checkForInput(event.pos):
                     user = User(username_input.text, password_input.text, repeat_password_input.text)

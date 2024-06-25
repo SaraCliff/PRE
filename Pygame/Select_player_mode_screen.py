@@ -2,13 +2,13 @@ import pygame
 import sys
 from button import Button, Personaje, Database
 from one_player_screen import one_player_screen
-from two_player_screen import two_player_screen
-from how_to_play_screen import how_to_play_screen
-from menu_screen import main_menu
+from Two_player_screen import two_player_screen
+from How_to_play_screen import how_to_play_screen
+from Menu_screen import main_menu
 def select_player_mode_screen(screen, personaje,database):
     pygame.init()
 
-    BG = pygame.image.load("assets/FONDOmain.png")
+    BG = pygame.image.load("Imagenes/Fondos/pantalla_principal.png")
     BG = pygame.transform.scale(BG, (1280, 720))
 
     def get_font(size):  # Returns Press-Start-2P in the desired size

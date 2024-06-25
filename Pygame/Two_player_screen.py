@@ -3,13 +3,13 @@ import sys
 from button import Button, TextDrawer, Personaje, Database
 
 def two_player_screen(screen, personaje,database):
-    from how_to_play_screen import how_to_play_screen
-    from select_player_mode_screen import select_player_mode_screen
-    from menu_screen import main_menu
+    from How_to_play_screen import how_to_play_screen
+    from Select_player_mode_screen import select_player_mode_screen
+    from Menu_screen import main_menu
     pygame.init()
     WIDTH = 1280
     HEIGHT = 720
-    BG = pygame.image.load("assets/fondo2.jpg")
+    BG = pygame.image.load("Imagenes/Fondos/nubes.png")
     BG = pygame.transform.scale(BG, (WIDTH, HEIGHT))
 
     SCREEN = pygame.display.set_mode((1280, 720))
@@ -22,49 +22,45 @@ def two_player_screen(screen, personaje,database):
 
     image_paths = [
         "assets/Options Rect.png",
-        "assets/fondo2.jpg",
-        "assets/fondo3.webp",
-        "assets/fondo4.jpg",
-        "assets/fondo5.png",
-        "assets/FONDOmain.png"
+        "Imagenes/Personajes/mariapaula.png",
+        "Imagenes/Personajes/sara_soto.png",
+        "Imagenes/Personajes/ramona.png",
+        "Imagenes/Personajes/robert_smith.png"
     ]
 
     images = [pygame.image.load(path) for path in image_paths]
     database = Database('userdata.db')
 
     buttons = [
-        Button(image=pygame.transform.scale(images[0], (125, 150)),
-               pos=(WIDTH // 4 - 100, HEIGHT // 3 + 100),
-               text_input="", font=get_font(50), base_color="#d7fcd4", hovering_color="White", image_path=image_paths[0]),
-        Button(image=pygame.transform.scale(images[1], (125, 150)),
-               pos=(WIDTH // 4 - 100, HEIGHT // 2 + 200),
-               text_input="", font=get_font(35), base_color="#d7fcd4", hovering_color="White", image_path=image_paths[1]),
-        Button(image=pygame.transform.scale(images[2], (125, 150)),
-               pos=(WIDTH // 4 + 100, HEIGHT // 3 + 100),
-               text_input="", font=get_font(50), base_color="#d7fcd4", hovering_color="White", image_path=image_paths[2]),
-        Button(image=pygame.transform.scale(images[3], (125, 150)),
-               pos=(WIDTH // 4 + 100, HEIGHT // 2 + 200),
-               text_input="", font=get_font(35), base_color="#d7fcd4", hovering_color="White", image_path=image_paths[3]),
-        Button(image=pygame.transform.scale(images[4], (125, 150)),
-               pos=(WIDTH // 4 + 300, HEIGHT // 3 + 100),
-               text_input="", font=get_font(50), base_color="#d7fcd4", hovering_color="White", image_path=image_paths[4]),
-        Button(image=pygame.transform.scale(images[5], (125, 150)),
-               pos=(WIDTH // 4 + 300, HEIGHT // 2 + 200),
-               text_input="", font=get_font(35), base_color="#d7fcd4", hovering_color="White", image_path=image_paths[5])
+        Button(image=pygame.transform.scale(images[1], (300, 300)), pos=(WIDTH // 4, HEIGHT // 2 + 200),
+               text_input="", font=get_font(35), base_color="#d7fcd4", hovering_color="White",
+               image_path=image_paths[1]),
+
+        Button(image=pygame.transform.scale(images[2], (300, 300)), pos=(WIDTH // 4, HEIGHT // 3 + 100),
+               text_input="", font=get_font(50), base_color="#d7fcd4", hovering_color="White",
+               image_path=image_paths[2]),
+
+        Button(image=pygame.transform.scale(images[3], (300, 300)), pos=(WIDTH // 4 + 250, HEIGHT // 2 + 200),
+               text_input="", font=get_font(35), base_color="#d7fcd4", hovering_color="White",
+               image_path=image_paths[3]),
+
+        Button(image=pygame.transform.scale(images[4], (300, 300)), pos=(WIDTH // 4 + 250, HEIGHT // 3 + 100),
+               text_input="", font=get_font(50), base_color="#d7fcd4", hovering_color="White",
+               image_path=image_paths[4]),
     ]
 
     ready_button = Button(image=pygame.transform.scale(images[0], (200, 50)),
-                          pos=(WIDTH // 4 + 800, HEIGHT // 2 + 310),
+                          pos=(WIDTH // 4 + 815, HEIGHT // 2 + 310),
                           text_input="READY", font=get_font(15),
                           base_color="#d7fcd4", hovering_color="White", image_path=image_paths[0])
 
     player_buttons = [
         Button(image=pygame.transform.scale(images[0], (200, 60)),
-               pos=(WIDTH // 4 + 515, HEIGHT // 2 + 250),
+               pos=(WIDTH // 4 + 515, HEIGHT // 2 + 200),
                text_input="PLAYER 1", font=get_font(15),
                base_color="#d7fcd4", hovering_color="White", image_path=image_paths[0]),
         Button(image=pygame.transform.scale(images[0], (200, 60)),
-               pos=(WIDTH // 4 + 815, HEIGHT // 2 + 250),
+               pos=(WIDTH // 4 + 815, HEIGHT // 2 + 200),
                text_input="PLAYER 2", font=get_font(15),
                base_color="#d7fcd4", hovering_color="White", image_path=image_paths[0])
     ]
@@ -123,21 +119,22 @@ def two_player_screen(screen, personaje,database):
         text_drawer = TextDrawer(screen)
         text_drawer.draw_text("BEAT BLAST", get_font(100), (186, 85, 211),
                               pygame.Rect(WIDTH // 4, HEIGHT // 3 - 100, WIDTH // 2, 40))
-        text_drawer.draw_text("Please select a character:", get_font(15), (0, 0, 0),
-                              pygame.Rect(WIDTH // 4 + 400, HEIGHT // 3 + 10, WIDTH // 2, 40))
+        text_drawer.draw_text("Please select a character:", get_font(15), (255, 255, 255),
+                              pygame.Rect(WIDTH // 4 + 290, HEIGHT // 3 + 10, WIDTH // 2, 40))
 
+        pygame.draw.rect(SCREEN, (255, 255, 255), (735, 300, 200, 200), 0)
+        pygame.draw.rect(SCREEN, (255, 255, 255), (1035, 300, 200, 200), 0)
         # Dibujar las imágenes seleccionadas con las posiciones adecuadas
         if selected_images[0] is not None:
-            SCREEN.blit(pygame.transform.scale(selected_images[0], (200, 250)), (735, 300))
+            SCREEN.blit(pygame.transform.scale(selected_images[0], (300, 300)), (687.5, 260))
         if selected_images[1] is not None:
-            SCREEN.blit(pygame.transform.scale(selected_images[1], (200, 250)), (1035, 300))
+            SCREEN.blit(pygame.transform.scale(selected_images[1], (300, 300)), (987.5, 260))
 
         for button in buttons + player_buttons + [ready_button, back_button, log_out_BUTTON,Quit_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
-        pygame.draw.rect(SCREEN, (255, 255, 255), (735, 300, 200, 250), 2)
-        pygame.draw.rect(SCREEN, (255, 255, 255), (1035, 300, 200, 250), 2)
+
 
         pygame.display.update()
 

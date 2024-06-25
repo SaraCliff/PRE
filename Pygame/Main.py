@@ -1,5 +1,5 @@
 import pygame
-from menu_screen import main_menu
+from Menu_screen import main_menu
 
 # Inicialización de Pygame
 pygame.init()
