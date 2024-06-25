@@ -1,22 +1,5 @@
 import pygame
 
-class Flecha(pygame.sprite.Sprite):
-    def __init__(self, image, x, y, velocidad):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect(topleft=(x, y))
-        self.velocidad = velocidad
-        self.collision_rect = pygame.Rect(
-            self.rect.centerx - 10,
-            self.rect.centery - 10,
-            20,
-            20
-        )
-
-    def update(self):
-        self.rect.y -= self.velocidad
-        self.collision_rect.y = self.rect.centery - 10
-
 class Model:
     def __init__(self):
         self.puntos = 0
@@ -28,7 +11,18 @@ class Model:
     def reset_puntos(self):
         self.puntos = 0
 
-    def agregar_flecha(self, flecha):
+    def agregar_flecha(self, image, x, y, velocidad):
+        flecha = {
+            'image': image,
+            'rect': image.get_rect(topleft=(x, y)),
+            'velocidad': velocidad,
+            'collision_rect': pygame.Rect(
+                x + image.get_width() // 2 - 10,
+                y + image.get_height() // 2 - 10,
+                20,
+                20
+            )
+        }
         self.flechas.append(flecha)
 
     def eliminar_flecha(self, flecha):
@@ -36,5 +30,7 @@ class Model:
 
     def actualizar_flechas(self):
         for flecha in self.flechas:
-            flecha.update()
-        self.flechas = [flecha for flecha in self.flechas if flecha.rect.bottom > 0]
+            flecha['rect'].y -= flecha['velocidad']
+            flecha['collision_rect'].y = flecha['rect'].centery - 10
+        self.flechas = [flecha for flecha in self.flechas if flecha['rect'].bottom > 0]
+

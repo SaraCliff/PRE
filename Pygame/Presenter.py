@@ -1,19 +1,21 @@
 import pygame
 import sys
-from Model import Model, Flecha
-from View import View, Paula
 from Top_puntuacion import top_puntuacion
 from button import Database
+from Model import Model
+from View import View
 
 class Presenter:
-    def __init__(self, model, view, mp3_file, txt_file):
+    def __init__(self, model, view, mp3_file, txt_file, bpm):
         self.model = model
         self.view = view
         self.mp3_file = mp3_file
         self.txt_file = txt_file
 
+        # Usar el BPM proporcionado
+        self.bpm = bpm
+
         self.clock = pygame.time.Clock()
-        self.bpm = 82
         self.beat_interval_ms = (60 * 1000) / self.bpm
         self.corchea_interval_ms = self.beat_interval_ms / 2
         self.velocidad_px_ms = 10
@@ -36,14 +38,14 @@ class Presenter:
             "right": (350, 50)
         }
 
-        self.paula_images = {
-            "arriba": pygame.transform.scale(pygame.image.load("paula_arriba.png").convert_alpha(), (250, 500)),
-            "abajo": pygame.transform.scale(pygame.image.load("paula_abajo.png").convert_alpha(), (250, 500)),
-            "izquierda": pygame.transform.scale(pygame.image.load("paula_izquierda.png").convert_alpha(), (250, 500)),
-            "derecha": pygame.transform.scale(pygame.image.load("paula_derecha.png").convert_alpha(), (250, 500))
-        }
+        paula_images = [
+            pygame.transform.scale(pygame.image.load("Imagenes/Paula/paula_arriba.png").convert_alpha(), (250, 500)),
+            pygame.transform.scale(pygame.image.load("Imagenes/Paula/paula_abajo.png").convert_alpha(), (250, 500)),
+            pygame.transform.scale(pygame.image.load("Imagenes/Paula/paula_izquierda.png").convert_alpha(), (250, 500)),
+            pygame.transform.scale(pygame.image.load("Imagenes/Paula/paula_derecha.png").convert_alpha(), (250, 500))
+        ]
 
-        self.paula = Paula(list(self.paula_images.values()), 900, 50)
+        self.view.cargar_paula_images(paula_images, 900, 50)
 
         self.font = pygame.font.Font("assets/font.ttf", 32)
         self.tiempo_ultimo_beat = pygame.time.get_ticks()
@@ -67,17 +69,15 @@ class Presenter:
                         columna = "left" if char == '5' else "up" if char == '6' else "down" if char == '7' else "right"
                         x = self.referencia_positions[columna][0]
                         y = self.view.screen_height - 10
-                        flecha = Flecha(self.referencia_images[columna], x, y, self.velocidad_px_ms)
-                        self.model.agregar_flecha(flecha)
+                        self.model.agregar_flecha(self.referencia_images[columna], x, y, self.velocidad_px_ms)
                     elif not corchea and char in '1234':
                         columna = "left" if char == '1' else "up" if char == '2' else "down" if char == '3' else "right"
                         x = self.referencia_positions[columna][0]
                         y = self.view.screen_height - 10
-                        flecha = Flecha(self.referencia_images[columna], x, y, self.velocidad_px_ms)
-                        self.model.agregar_flecha(flecha)
+                        self.model.agregar_flecha(self.referencia_images[columna], x, y, self.velocidad_px_ms)
 
     def chequear_colision(self, flecha, posicion_referencia):
-        return flecha.collision_rect.colliderect(pygame.Rect(
+        return flecha['collision_rect'].colliderect(pygame.Rect(
             posicion_referencia[0] + self.flecha_width // 2 - self.collision_rect_margin,
             posicion_referencia[1] + self.flecha_height // 2 - self.collision_rect_margin,
             self.collision_rect_margin * 2, self.collision_rect_margin * 2))
@@ -91,14 +91,14 @@ class Presenter:
         }
 
         teclas_imagenes = {
-            pygame.K_LEFT: self.paula_images["izquierda"],
-            pygame.K_UP: self.paula_images["arriba"],
-            pygame.K_DOWN: self.paula_images["abajo"],
-            pygame.K_RIGHT: self.paula_images["derecha"]
+            pygame.K_LEFT: self.view.paula_images[2],
+            pygame.K_UP: self.view.paula_images[0],
+            pygame.K_DOWN: self.view.paula_images[1],
+            pygame.K_RIGHT: self.view.paula_images[3]
         }
 
         if tecla in teclas_imagenes:
-            self.paula.image = teclas_imagenes[tecla]
+            self.view.paula_index = self.view.paula_images.index(teclas_imagenes[tecla])
 
         if tecla in teclas_posiciones:
             for flecha in self.model.flechas:
@@ -108,7 +108,7 @@ class Presenter:
                     break
 
         if tecla == pygame.K_p:
-            self.paula.update()
+            self.view.actualizar_paula()
 
     def ejecutar(self):
         running = True
@@ -122,21 +122,22 @@ class Presenter:
             tiempo_actual = pygame.time.get_ticks()
             if tiempo_actual - self.tiempo_ultimo_beat >= self.beat_interval_ms:
                 self.generar_flechas(self.txt_file, self.beat_count, corchea=False)
-                self.tiempo_ultimo_beat = tiempo_actual
                 self.beat_count += 1
+                self.tiempo_ultimo_beat = tiempo_actual
 
             if tiempo_actual - self.tiempo_ultima_corchea >= self.corchea_interval_ms:
                 self.generar_flechas(self.txt_file, self.beat_count, corchea=True)
                 self.tiempo_ultima_corchea = tiempo_actual
 
             self.model.actualizar_flechas()
+
             self.view.mostrar_fondo()
             self.view.mostrar_flechas(self.model.flechas, self.referencia_images, self.referencia_positions)
-            self.view.screen.blit(self.paula.image, self.paula.rect)
             self.view.mostrar_puntaje(self.model.puntos, self.font)
+            self.view.mostrar_paula()
             self.view.actualizar_pantalla()
-            self.clock.tick(60)
 
+            self.clock.tick(60)
             # Verificar si la música ha terminado
             if not pygame.mixer.music.get_busy():
                 running = False
@@ -154,10 +155,11 @@ if __name__ == "__main__":
     view = View(screen_width, screen_height)
 
     # Aquí debes obtener los archivos seleccionados (mp3 y txt) de alguna manera, por ejemplo:
-    mp3_file = "3 de febrero.mp3"  # Reemplaza esto con la ruta al archivo seleccionado
-    txt_file = "chiara.txt"  # Reemplaza esto con la ruta al archivo seleccionado
+    mp3_file = "MP3_files/Jeff Hardy.mp3"  # Reemplaza esto con la ruta al archivo seleccionado
+    txt_file = "Txt_files/Blnko.txt"  # Reemplaza esto con la ruta al archivo seleccionado
+    bpm = 122
 
-    presenter = Presenter(model, view, mp3_file, txt_file)
+    presenter = Presenter(model, view, mp3_file, txt_file,bpm)
 
     presenter.ejecutar()
 

@@ -6,9 +6,10 @@ from View import View
 from Presenter import Presenter
 
 class Nivel:
-    def __init__(self, mp3_file, txt_file, db_file='userdata.db'):
+    def __init__(self, mp3_file, txt_file, bpm, db_file='userdata.db'):
         self.mp3_file = mp3_file
         self.txt_file = txt_file
+        self.bpm = bpm
         self.db_file = db_file
 
         pygame.init()
@@ -19,11 +20,12 @@ class Nivel:
 
         self.model = Model()
         self.view = View(self.screen_width, self.screen_height)
-        self.presenter = Presenter(self.model, self.view, self.mp3_file, self.txt_file)
+        self.presenter = Presenter(self.model, self.view, self.mp3_file, self.txt_file, self.bpm)
 
     def ejecutar(self):
         self.presenter.ejecutar()
         pygame.quit()
         sys.exit()
+
 
 
