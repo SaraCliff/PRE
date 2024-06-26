@@ -1,14 +1,14 @@
 import pygame
 import sys
-from button import Button, Database  # Asegúrate de que tu clase Button esté en un archivo llamado button.py
+from button import Button, Database, Personaje  # Asegúrate de que tu clase Button esté en un archivo llamado button.py
 from Menu_screen import main_menu
 
 
 def top_puntuacion(screen, database):
     pygame.init()
-    BG = pygame.image.load("assets/FONDOmain.png")
+    BG = pygame.image.load("Imagenes/Fondos/pantalla_final.png")
     BG = pygame.transform.scale(BG, (1280, 720))
-    from Select_level_screen import select_level_screen
+    from Select_player_mode_screen import select_player_mode_screen
 
     def get_font(size):  # Returns Press-Start-2P in the desired size
         return pygame.font.Font("assets/font.ttf", size)
@@ -22,7 +22,7 @@ def top_puntuacion(screen, database):
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         db.borrar_personaje1()
 
-        MENU_TEXT = get_font(100).render("BEAT BLAST", True, "#BA55D3")
+        MENU_TEXT = get_font(100).render("BEAT BLAST", True,"#d7fcd4" )
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 150))
 
         Fondobut = pygame.image.load("assets/Options Rect.png")
@@ -45,16 +45,16 @@ def top_puntuacion(screen, database):
         # Displaying top 5 scores in a video game inspired style
         if top5_scores is not None:
             scores_title = "HIGH SCORES"
-            SCORES_TITLE_TEXT = get_font(50).render(scores_title, True, "#FFD700")
+            SCORES_TITLE_TEXT = get_font(50).render(scores_title, True, (0,0,0))
             SCORES_TITLE_RECT = SCORES_TITLE_TEXT.get_rect(center=(640, 250))
             SCREEN.blit(SCORES_TITLE_TEXT, SCORES_TITLE_RECT)
 
             # Headers for Rank and Points
-            RANK_HEADER = get_font(35).render("RANK", True, "#FFD700")
+            RANK_HEADER = get_font(35).render("RANK", True, (0,0,0))
             RANK_RECT = RANK_HEADER.get_rect(center=(540, 320))
             SCREEN.blit(RANK_HEADER, RANK_RECT)
 
-            POINTS_HEADER = get_font(35).render("POINTS", True, "#FFD700")
+            POINTS_HEADER = get_font(35).render("POINTS", True, (0,0,0))
             POINTS_RECT = POINTS_HEADER.get_rect(center=(740, 320))
             SCREEN.blit(POINTS_HEADER, POINTS_RECT)
 
@@ -85,13 +85,13 @@ def top_puntuacion(screen, database):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if NEXT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    select_level_screen(SCREEN, database)
+                    select_player_mode_screen(SCREEN,Personaje, database = "userdata.db")
                 if Quit_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    database.logout()
+                    db.logout()
                     pygame.quit()
                     sys.exit()
                 if log_out_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    database.logout()
+                    db.logout()
                     main_menu(SCREEN, database)
 
         pygame.display.update()

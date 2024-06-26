@@ -246,6 +246,34 @@ class Database:
 		else:
 			return None
 
+	def get_highest_score(self, column):
+		try:
+			with open("Logged_in_username.txt", "r") as archivo:
+				username = archivo.read().strip()
+		except FileNotFoundError:
+			print("Error: Logged_in_username.txt not found.")
+			return None
+
+		if username:
+			self.c.execute(f"SELECT {column} FROM users WHERE username=?", (username,))
+			result = self.c.fetchone()
+			if result and result[0]:
+				try:
+					scores = ast.literal_eval(result[0])
+					if scores:
+						highest_score = max(scores)
+						return highest_score
+					else:
+						return None
+				except (ValueError, SyntaxError) as e:
+					print(f"Error parsing scores: {e}")
+					return None
+			else:
+				return None
+		else:
+			return None
+
+
 class User:
 	def __init__(self, username, password, repeat_password):
 		self.username = username

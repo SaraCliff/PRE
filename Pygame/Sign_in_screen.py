@@ -3,7 +3,7 @@ import sys
 from button import Button, InputText, User, TextDrawer2, TextDrawer
 
 def sign_in_screen(screen):
-    from Main import main_menu
+    from Juego import main_menu
     pygame.init()
     BG = pygame.image.load("Imagenes/Fondos/nubes.png")
     BG = pygame.transform.scale(BG, (1280, 720))

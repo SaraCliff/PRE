@@ -72,7 +72,7 @@ class Presenter:
             else:
                 # Default: imágenes de Paula genéricas si no se reconoce el personaje
                 paula_arriba = "Imagenes/robert/robert_arriba.png"
-                paula_abajo = "Imagenes/robert/robert_abajo.png"
+                paula_abajo = "Imagenes/robert/rober_abajo.png"
                 paula_izquierda = "Imagenes/robert/robert_izquierda.png"
                 paula_derecha = "Imagenes/robert/robert_derecha.png"
 

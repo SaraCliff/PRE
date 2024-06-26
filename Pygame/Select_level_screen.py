@@ -7,7 +7,7 @@ from Nivel import Nivel
 def select_level_screen(screen, database):
     pygame.init()
 
-    BG = pygame.image.load("assets/FONDOmain.png")
+    BG = pygame.image.load("Imagenes/Fondos/mapa_niveles.png")
     BG = pygame.transform.scale(BG, (1280, 720))
 
     def get_font(size):
@@ -18,31 +18,86 @@ def select_level_screen(screen, database):
         SCREEN.blit(BG, (0, 0))
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("BEAT BLAST", True, "#BA55D3")
-        MENU_RECT = MENU_TEXT.get_rect(center=(640, 150))
+        MENU_TEXT = get_font(60).render("BEAT BLAST", True, (255, 255, 255))
+        MENU_RECT = MENU_TEXT.get_rect(center=(450, 150))
 
         Fondobut = pygame.image.load("assets/Options Rect.png")
 
-        level1_BUTTON = Button(image=pygame.transform.scale(Fondobut, (500, 109)), pos=(640, 300),
-                               text_input="LEVEL 1", font=get_font(40), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
+        database = Database('userdata.db')
 
-        level2_BUTTON = Button(image=Fondobut, pos=(640, 450),
-                               text_input="LEVEL 2", font=get_font(40), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
+        # Obtenemos las puntuaciones más altas
+        high_score_chiara = database.get_highest_score("top5_chiara") or 0
+        high_score_blnko = database.get_highest_score("top5_blnko") or 0
+        high_score_smiths = database.get_highest_score("top5_smiths") or 0
+        high_score_cure = database.get_highest_score("top5_cure") or 0
 
-        level3_BUTTON = Button(image=Fondobut, pos=(640, 600),
-                               text_input="LEVEL 3", font=get_font(40), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
+        # Definimos el umbral de puntuación
+        score_threshold = 100
 
-        log_out_BUTTON = Button(image=pygame.transform.scale(Fondobut, (175, 70)), pos=(1175, 50),
-                                text_input="LOG OUT", font=get_font(20), base_color="#d7fcd4",
-                                hovering_color="White", image_path="assets/Options Rect.png")
+        # Determinamos el color del texto basado en la puntuación
+        color_chiara = (0, 255, 0) if high_score_chiara >= score_threshold else (255, 0, 0)
+        color_smiths = (0, 255, 0) if high_score_smiths >= score_threshold else (255, 0, 0)
+        color_cure = (0, 255, 0) if high_score_cure >= score_threshold else (255, 0, 0)
+        color_blnko = (0, 255, 0) if high_score_blnko >= score_threshold else (255, 0, 0)
 
-        Quit_BUTTON = Button(image=pygame.transform.scale(Fondobut, (125, 70)), pos=(75, 50),
-                             text_input="Quit", font=get_font(20), base_color="#d7fcd4",
-                             hovering_color="White", image_path="assets/Options Rect.png")
+        # Muestra la puntuación y el umbral para cada canción
+        SCORE_HEADER = get_font(10).render(f"{high_score_chiara}/{score_threshold}", True, color_chiara)
+        SCORE_RECT = SCORE_HEADER.get_rect(center=(300, 320))
+        SCREEN.blit(SCORE_HEADER, SCORE_RECT)
+
+        RANK_HEADER = get_font(10).render("3 de febrero - Chiara Oliver", True, color_chiara)
+        RANK_RECT = RANK_HEADER.get_rect(center=(300, 340))
+        SCREEN.blit(RANK_HEADER, RANK_RECT)
+
+        SCORE_HEADER = get_font(10).render(f"{high_score_smiths}/{score_threshold}", True, color_smiths)
+        SCORE_RECT = SCORE_HEADER.get_rect(center=(500, 650))
+        SCREEN.blit(SCORE_HEADER, SCORE_RECT)
+
+        RANK_HEADER = get_font(10).render("There is a light that never goes out - The Smiths", True, color_smiths)
+        RANK_RECT = RANK_HEADER.get_rect(center=(500, 670))
+        SCREEN.blit(RANK_HEADER, RANK_RECT)
+
+        SCORE_HEADER = get_font(10).render(f"{high_score_cure}/{score_threshold}", True, color_cure)
+        SCORE_RECT = SCORE_HEADER.get_rect(center=(750, 280))
+        SCREEN.blit(SCORE_HEADER, SCORE_RECT)
+
+        RANK_HEADER = get_font(10).render("Just like heaven - The Cure", True, color_cure)
+        RANK_RECT = RANK_HEADER.get_rect(center=(750, 300))
+        SCREEN.blit(RANK_HEADER, RANK_RECT)
+
+        SCORE_HEADER = get_font(10).render(f"{high_score_blnko}/{score_threshold}", True, color_blnko)
+        SCORE_RECT = SCORE_HEADER.get_rect(center=(980, 690))
+        SCREEN.blit(SCORE_HEADER, SCORE_RECT)
+
+        RANK_HEADER = get_font(10).render("Jeff Hardy - Blnko", True, color_blnko)
+        RANK_RECT = RANK_HEADER.get_rect(center=(980, 710))
+        SCREEN.blit(RANK_HEADER, RANK_RECT)
+
+        # Botones de nivel
+        level1_BUTTON = Button(image=pygame.transform.scale(Fondobut, (100, 40)), pos=(290, 380),
+                               text_input="LEVEL 1", font=get_font(10), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
+
+        level2_BUTTON = Button(image=pygame.transform.scale(Fondobut, (100, 40)), pos=(490, 640),
+                               text_input="LEVEL 2", font=get_font(10), base_color="#d7fcd4" if high_score_chiara >= score_threshold else "#808080",
+                               hovering_color="White", image_path="assets/Options Rect.png")
+
+        level3_BUTTON = Button(image=pygame.transform.scale(Fondobut, (100, 40)), pos=(750, 320),
+                               text_input="LEVEL 3", font=get_font(10), base_color="#d7fcd4" if high_score_smiths >= score_threshold else "#808080",
+                               hovering_color="White", image_path="assets/Options Rect.png")
+
+        level4_BUTTON = Button(image=pygame.transform.scale(Fondobut, (100, 40)), pos=(980, 660),
+                               text_input="LEVEL 4", font=get_font(10), base_color="#d7fcd4" if high_score_cure >= score_threshold else "#808080",
+                               hovering_color="White", image_path="assets/Options Rect.png")
+
+        log_out_BUTTON = Button(image=pygame.transform.scale(Fondobut, (175, 50)), pos=(1175, 27.5),
+                                text_input="LOG OUT", font=get_font(20), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
+
+        Quit_BUTTON = Button(image=pygame.transform.scale(Fondobut, (125, 50)), pos=(75, 27.5),
+                             text_input="Quit", font=get_font(20), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT)
-        database = Database('userdata.db')
-        for button in [level1_BUTTON, level2_BUTTON, level3_BUTTON, log_out_BUTTON, Quit_BUTTON]:
+
+        for button in [level1_BUTTON, level2_BUTTON, level3_BUTTON, level4_BUTTON, log_out_BUTTON, Quit_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
@@ -53,16 +108,20 @@ def select_level_screen(screen, database):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if level1_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    database.actualizar_cancion_jugada(cancion = "top5_chiara")
-                    nivel = Nivel("MP3_files/3 de febrero.mp3", "Txt_files/chiara.txt", bpm = 81)
-                    nivel.ejecutar()
-                if level2_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    database.actualizar_cancion_jugada(cancion="top5_blnko")
-                    nivel = Nivel("MP3_files/Jeff Hardy.mp3", "Txt_files/Blnko.txt", bpm = 122)
-                    nivel.ejecutar()
-                if level3_BUTTON.checkForInput(MENU_MOUSE_POS):
                     database.actualizar_cancion_jugada(cancion="top5_chiara")
-                    nivel = Nivel("MP3_files/3 de febrero.mp3", "Txt_files/chiara.txt", bpm = 81)
+                    nivel = Nivel("MP3_files/3 de febrero.mp3", "Txt_files/chiara.txt", bpm=82)
+                    nivel.ejecutar()
+                if level2_BUTTON.checkForInput(MENU_MOUSE_POS) and high_score_chiara >= score_threshold:
+                    database.actualizar_cancion_jugada(cancion="top5_smiths")
+                    nivel = Nivel("MP3_files/There Is a Light That Never Goes Out.mp3", "Txt_files/smiths.txt", bpm=136)
+                    nivel.ejecutar()
+                if level3_BUTTON.checkForInput(MENU_MOUSE_POS) and high_score_smiths >= score_threshold:
+                    database.actualizar_cancion_jugada(cancion="top5_cure")
+                    nivel = Nivel("MP3_files/Just like heaven.mp3", "Txt_files/cure.txt", bpm=151)
+                    nivel.ejecutar()
+                if level4_BUTTON.checkForInput(MENU_MOUSE_POS) and high_score_cure >= score_threshold:
+                    database.actualizar_cancion_jugada(cancion="top5_blnko")
+                    nivel = Nivel("MP3_files/Jeff Hardy.mp3", "Txt_files/Blnko.txt", bpm=122)
                     nivel.ejecutar()
                 if log_out_BUTTON.checkForInput(MENU_MOUSE_POS):
                     database.logout()
