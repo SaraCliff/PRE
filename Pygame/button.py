@@ -74,7 +74,7 @@ class Database:
 		self.conn = sqlite3.connect(filename)
 		self.c = self.conn.cursor()
 		self.c.execute('''CREATE TABLE IF NOT EXISTS users
-                          (username TEXT PRIMARY KEY, password TEXT, SignIn INTEGER DEFAULT 0, Personaje1 TEXT)''')
+                          (username TEXT PRIMARY KEY, password TEXT, SignIn INTEGER DEFAULT 0, Personaje1 TEXT, Personaje1 TEXT, Top5_chiara TEXT,Top5_smiths TEXT, Top5_cure TEXT, Top5_blnko TEXT, Cancion_jugada TEXT)''')
 		self.conn.commit()
 
 	def register_user(self, username, password):

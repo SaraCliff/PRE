@@ -181,7 +181,7 @@ if __name__ == "__main__":
     screen_height = 720
 
     model = Model()
-    view = View(screen_width, screen_height)
+    view = View(screen_width, screen_height, fondo_de_pantalla="Imagenes/Fondos/nivel4.png")
 
     # Aquí debes obtener los archivos seleccionados (mp3 y txt) de alguna manera, por ejemplo:
     mp3_file = "MP3_files/Jeff Hardy.mp3"  # Reemplaza esto con la ruta al archivo seleccionado

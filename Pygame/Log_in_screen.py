@@ -34,6 +34,9 @@ def log_in_screen(screen,database):
     back_button = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (200, 60)),
                          pos=(WIDTH // 8, HEIGHT // 2 + 300), text_input="BACK", font=get_font(35),
                          base_color="#d7fcd4", hovering_color="White",image_path="assets/Options Rect.png")
+    Quit_button = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (80, 50)),
+                         pos=(50, 30), text_input="Quit", font=get_font(15),
+                         base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
 
     last_verification_state = None
     message_bg = pygame.transform.scale(pygame.image.load("assets/Quit Rect.png"), (600, 100))
@@ -66,6 +69,9 @@ def log_in_screen(screen,database):
                         last_verification_state = result
                 if back_button.checkForInput(event.pos):
                     main_menu(screen, database = "userdata.db")
+                if Quit_button.checkForInput(event.pos):
+                    pygame.quit()
+                    sys.exit()
 
 
         pygame.draw.rect(screen, GRAY, (WIDTH // 4 + 275, HEIGHT // 3, WIDTH // 4, 40))
@@ -80,6 +86,8 @@ def log_in_screen(screen,database):
         log_in_button.update(screen)
         back_button.changeColor(pygame.mouse.get_pos())
         back_button.update(screen)
+        Quit_button.changeColor(pygame.mouse.get_pos())
+        Quit_button.update(screen)
 
         if last_verification_state is not None:
             message_rect = message_bg.get_rect(center=(WIDTH // 2, HEIGHT // 2+150))

@@ -30,11 +30,14 @@ def sign_in_screen(screen):
     last_verification_state = None
 
     but = pygame.image.load("assets/Options Rect.png")
-    quit_button = Button(image=pygame.transform.scale(but,(200,60)), pos=(WIDTH // 8, HEIGHT // 2 + 300),
+    back_button = Button(image=pygame.transform.scale(but,(200,60)), pos=(WIDTH // 8, HEIGHT // 2 + 300),
                          text_input="BACK", font=get_font(35), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
 
     check_button = Button(image=pygame.transform.scale(but, (300, 80)), pos=(WIDTH // 2, HEIGHT // 2 + 300),
                           text_input="CHECK", font=get_font(50), base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
+    Quit_button = Button(image=pygame.transform.scale(pygame.image.load("assets/Options Rect.png"), (80, 50)),
+                         pos=(50, 30), text_input="Quit", font=get_font(15),
+                         base_color="#d7fcd4", hovering_color="White", image_path="assets/Options Rect.png")
 
     verification_bg = pygame.image.load("assets/Quit Rect.png")
     verification_bg = pygame.transform.scale(verification_bg, (WIDTH // 2 + 200, 100))
@@ -55,8 +58,12 @@ def sign_in_screen(screen):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
 
-                if quit_button.checkForInput(event.pos):
+                if back_button.checkForInput(event.pos):
                     main_menu(screen, database="userdata.db")
+
+                if Quit_button.checkForInput(event.pos):
+                    pygame.quit()
+                    sys.exit()
 
                 if check_button.checkForInput(event.pos):
                     user = User(username_input.text, password_input.text, repeat_password_input.text)
@@ -90,10 +97,12 @@ def sign_in_screen(screen):
                               pygame.Rect(WIDTH // 4 - 310, HEIGHT // 3 + 160, WIDTH // 2, 40))
         text_drawer.draw_text("BEAT BLAST", get_font(100), PINK,
                               pygame.Rect(WIDTH // 4, HEIGHT // 3 - 150, WIDTH // 2, 40))
-        quit_button.changeColor(pygame.mouse.get_pos())
-        quit_button.update(screen)
+        back_button.changeColor(pygame.mouse.get_pos())
+        back_button.update(screen)
         check_button.changeColor(pygame.mouse.get_pos())
         check_button.update(screen)
+        Quit_button.changeColor(pygame.mouse.get_pos())
+        Quit_button.update(screen)
 
         if show_verification_text:
             screen.blit(verification_bg, (WIDTH // 4-100, HEIGHT // 3 + 250))

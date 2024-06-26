@@ -1,14 +1,13 @@
 import pygame
 
-
 class View:
-    def __init__(self, screen_width, screen_height):
+    def __init__(self, screen_width, screen_height, fondo_de_pantalla):
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("Juego de Ritmo")
 
-        self.fondo_de_pantalla = pygame.image.load("Imagenes/Fondos/FONDO_CUPIDO.png").convert()
+        self.fondo_de_pantalla = pygame.image.load(fondo_de_pantalla).convert()
         self.fondo_de_pantalla = pygame.transform.scale(self.fondo_de_pantalla, (screen_width, screen_height))
 
         self.WHITE = (255, 255, 255)
@@ -44,6 +43,7 @@ class View:
 
     def mostrar_paula(self):
         self.screen.blit(self.paula_images[self.paula_index], self.paula_rect)
+
 
 
 
