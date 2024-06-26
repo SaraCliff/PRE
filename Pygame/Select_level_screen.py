@@ -1,6 +1,8 @@
 import pygame
 import sys
-from button import Button, Database, Personaje
+from Button import Button
+from Database import Database
+from Personaje import Personaje
 from Menu_screen import main_menu
 from Nivel import Nivel
 from Select_player_mode_screen import select_player_mode_screen

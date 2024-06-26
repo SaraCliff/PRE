@@ -1,6 +1,8 @@
 import pygame
 import sys
-from button import Button, Personaje, Database
+from Button import Button
+from Database import Database
+from Personaje import Personaje
 from one_player_screen import one_player_screen
 from Two_player_screen import two_player_screen
 from How_to_play_screen import how_to_play_screen

@@ -1,7 +1,11 @@
 import pygame
 import sys
-from button import TextDrawer2, Button, Database, Personaje
+from Button import Button
+from TextDrawer2 import TextDrawer2
+from Database import Database
+from Personaje import Personaje
 from Menu_screen import main_menu
+
 
 
 # Función para obtener la fuente "Press-Start-2P" en el tamaño deseado

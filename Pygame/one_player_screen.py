@@ -1,6 +1,9 @@
 import pygame
 import sys
-from button import Button, TextDrawer, Personaje, Database
+from Button import Button
+from Database import Database
+from TextDrawer import TextDrawer
+from Personaje import Personaje
 
 def one_player_screen(screen):
     from Select_player_mode_screen import select_player_mode_screen

@@ -1,6 +1,10 @@
 import pygame
 import sys
-from button import Button, InputText, User, TextDrawer2, TextDrawer
+from Button import Button
+from InputText import InputText
+from TextDrawer2 import TextDrawer2
+from TextDrawer import TextDrawer
+from User import User
 
 def sign_in_screen(screen):
     from Juego import main_menu

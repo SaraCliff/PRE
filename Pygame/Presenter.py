@@ -1,7 +1,7 @@
 import pygame
 import sys
 from Top_puntuacion import top_puntuacion
-from button import Database
+from Database import Database
 from Model import Model
 from View import View
 

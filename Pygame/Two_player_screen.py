@@ -1,6 +1,9 @@
 import pygame
 import sys
-from button import Button, TextDrawer, Personaje, Database
+from Button import Button
+from Database import Database
+from Personaje import Personaje
+from TextDrawer import TextDrawer
 
 def two_player_screen(screen, personaje,database):
     from How_to_play_screen import how_to_play_screen

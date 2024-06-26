@@ -1,7 +1,10 @@
 import pygame
 import sys
-from button import InputText, Database, Button, TextDrawer, Personaje
-
+from Button import Button
+from InputText import InputText
+from Database import Database
+from TextDrawer import TextDrawer
+from Personaje import Personaje
 
 def log_in_screen(screen,database):
     from Menu_screen import main_menu

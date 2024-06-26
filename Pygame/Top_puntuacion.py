@@ -1,6 +1,8 @@
 import pygame
 import sys
-from button import Button, Database, Personaje  # Asegúrate de que tu clase Button esté en un archivo llamado button.py
+from Button import Button
+from Database import Database
+from Personaje import Personaje
 from Menu_screen import main_menu
 
 

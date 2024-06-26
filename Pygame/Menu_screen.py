@@ -1,6 +1,6 @@
 import pygame
 import sys
-from button import Button
+from Button import Button
 from Log_in_screen import log_in_screen
 from Sign_in_screen import sign_in_screen
 
